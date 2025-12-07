@@ -52,6 +52,13 @@ export const CONFIG = {
   DYNAMICS: {
     MIN_VELOCITY: 0.3,     // 最小力度
     MAX_VELOCITY: 1.0      // 最大力度
+  },
+
+  // 節奏量化設定
+  QUANTIZE: {
+    ENABLED: true,         // 是否啟用量化
+    BPM: 120,              // 節拍速度
+    SUBDIVISION: '8n'      // 量化單位：8n = 1/8 音符 (每拍 2 個點)
   }
 };
 

@@ -24,6 +24,9 @@ let currentThreshold = CONFIG.BASE_THRESHOLD;
 let currentVolume = 0;
 let waveformData = [];
 
+// 量化相關
+let pendingNote = null;  // 等待播放的音符 { note, velocity, volume }
+
 // ============================================
 // Getters（供外部模組讀取）
 // ============================================
@@ -80,6 +83,27 @@ export async function initAudio() {
       }
     }).toDestination();
     synth.volume.value = -8;
+
+    // 設定節奏量化
+    if (CONFIG.QUANTIZE.ENABLED) {
+      Tone.Transport.bpm.value = CONFIG.QUANTIZE.BPM;
+
+      // 每個量化點檢查是否有待播放的音符
+      Tone.Transport.scheduleRepeat((time) => {
+        if (pendingNote) {
+          // 播放音符
+          synth.triggerAttackRelease(
+            pendingNote.note,
+            '8n',
+            time,
+            pendingNote.velocity
+          );
+          pendingNote = null;
+        }
+      }, CONFIG.QUANTIZE.SUBDIVISION);
+
+      Tone.Transport.start();
+    }
 
     isRunning = true;
     return true;
@@ -143,8 +167,13 @@ function triggerNote() {
   // 取得下一個音符和力度
   const { note, velocity } = getNextNote(currentVolume);
 
-  // 播放音符
-  synth.triggerAttackRelease(note, '8n', undefined, velocity);
+  if (CONFIG.QUANTIZE.ENABLED) {
+    // 量化模式：將音符放入待播放佇列，等下一個拍點播放
+    pendingNote = { note, velocity, volume: currentVolume };
+  } else {
+    // 非量化模式：立即播放
+    synth.triggerAttackRelease(note, '8n', undefined, velocity);
+  }
 }
 
 /**
@@ -182,6 +211,12 @@ function startFeedbackProtection() {
  * 清理所有音頻資源
  */
 export function cleanup() {
+  // 停止 Transport
+  if (CONFIG.QUANTIZE.ENABLED) {
+    Tone.Transport.stop();
+    Tone.Transport.cancel();
+  }
+
   if (mic) {
     mic.close();
     mic.dispose();
@@ -199,5 +234,6 @@ export function cleanup() {
     waveform.dispose();
     waveform = null;
   }
+  pendingNote = null;
   isRunning = false;
 }
