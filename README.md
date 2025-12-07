@@ -1,5 +1,10 @@
 # Voice Ripple Piano
 
+[![License: CC BY 4.0](https://img.shields.io/badge/License-CC%20BY%204.0-lightgrey.svg)](https://creativecommons.org/licenses/by/4.0/)
+[![Live Demo](https://img.shields.io/badge/Demo-Live-blue.svg)](https://tznthou.github.io/day-09-voice-ripple/)
+[![p5.js](https://img.shields.io/badge/p5.js-1.11.2-ed225d.svg)](https://p5js.org/)
+[![Tone.js](https://img.shields.io/badge/Tone.js-14.8.49-f734d3.svg)](https://tonejs.github.io/)
+
 > 聲控雨滴鋼琴 — 你的聲音化為漣漪與音符
 
 [← 回到 Muripo HQ](https://tznthou.github.io/muripo-hq/)
