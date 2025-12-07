@@ -12,6 +12,7 @@ const CONFIG = {
   COOLDOWN_MS: 220,          // 觸發後冷卻時間（加長防回授）
   SILENCE_MS: 100,           // 觸發後靜音期（加長防回授）
   DYNAMIC_BOOST: 0.06,       // 動態閾值提升量（加大防回授）
+  THRESHOLD_RESTORE_MS: 600,  // 閾值恢復延遲（需大於合成器 release 0.4s）
 
   // 視覺參數
   BG_COLOR: '#1a1d2e',       // 背景色（深藍黑）
@@ -21,11 +22,12 @@ const CONFIG = {
   RIPPLE_FADE_SPEED: 2,      // 漣漪淡出速度 - 減慢讓漣漪持續更久
   MAX_RIPPLES: 30,           // 最大同時存在漣漪數
 
-  // 五聲音階 (C Major Pentatonic 跨三個八度)
-  PENTATONIC: [
-    'C3', 'D3', 'E3', 'G3', 'A3',
-    'C4', 'D4', 'E4', 'G4', 'A4',
-    'C5', 'D5', 'E5', 'G5', 'A5'
+  // Lydian 調式音階 (C Lydian 跨三個八度)
+  // Lydian 特色：升四度(F#)，聽起來飄浮、夢幻
+  SCALE: [
+    'C3', 'D3', 'E3', 'F#3', 'G3', 'A3', 'B3',
+    'C4', 'D4', 'E4', 'F#4', 'G4', 'A4', 'B4',
+    'C5', 'D5', 'E5', 'F#5', 'G5', 'A5', 'B5'
   ]
 };
 
@@ -148,9 +150,9 @@ async function initAudio() {
       oscillator: { type: 'sine' },
       envelope: {
         attack: 0.02,
-        decay: 0.3,
-        sustain: 0.15,
-        release: 1.2
+        decay: 0.15,      // 縮短衰減，更清脆
+        sustain: 0.05,    // 降低持續，減少拖尾
+        release: 0.4      // 縮短釋放，減少回聲
       }
     }).toDestination();
     synth.volume.value = -8;
@@ -204,7 +206,7 @@ function checkAndTrigger() {
 
 function triggerNote() {
   // 隨機選擇一個音符
-  const note = random(CONFIG.PENTATONIC);
+  const note = random(CONFIG.SCALE);
   synth.triggerAttackRelease(note, '8n');
 }
 
@@ -224,11 +226,12 @@ function startFeedbackProtection() {
   // 4. 冷卻結束後重置
   setTimeout(() => {
     isCoolingDown = false;
-    // 稍後恢復原始閾值
-    setTimeout(() => {
-      currentThreshold = CONFIG.BASE_THRESHOLD;
-    }, 150);
   }, CONFIG.COOLDOWN_MS);
+
+  // 5. 延遲恢復閾值（需等合成器聲音完全消失）
+  setTimeout(() => {
+    currentThreshold = CONFIG.BASE_THRESHOLD;
+  }, CONFIG.THRESHOLD_RESTORE_MS);
 }
 
 // ============================================
