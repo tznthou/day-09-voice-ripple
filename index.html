@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Voice Ripple Piano | 聲控雨滴鋼琴</title>
+
+  <!-- Tailwind CSS 4.0 (JIT 動態編譯，無法使用 SRI) -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- p5.js -->
+  <script
+    src="https://cdn.jsdelivr.net/npm/p5@1.11.2/lib/p5.min.js"
+    integrity="sha384-fN6ZTti0XTr3VpiB6wpl+XOK8SAd8oa3WaMuDrOIQh7x1KuAXYjsp8nQag3IQ5xR"
+    crossorigin="anonymous"></script>
+
+  <!-- Tone.js -->
+  <script
+    src="https://cdn.jsdelivr.net/npm/tone@14.8.49/build/Tone.min.js"
+    integrity="sha384-1e4yQRoAQ3GgNLnfUYiK34ltfBMT0MANgMHALMEs2zL8mrImXok1EYN3kctlLBKC"
+    crossorigin="anonymous"></script>
+
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="overflow-hidden">
+
+  <!-- 開始畫面 -->
+  <div id="start-screen" class="fixed inset-0 z-50 flex flex-col items-center justify-center bg-slate-900">
+    <div class="text-center max-w-md px-6">
+      <h1 class="text-4xl font-light text-slate-100 mb-3">Voice Ripple Piano</h1>
+      <p class="text-slate-400 mb-6">你的聲音將化為漣漪與音符</p>
+
+      <!-- 使用說明 -->
+      <div class="text-left bg-slate-800/50 rounded-xl p-4 mb-6 text-sm">
+        <p class="text-slate-300 mb-2 font-medium">如何使用</p>
+        <ul class="text-slate-400 space-y-1 list-disc list-inside">
+          <li>對著麥克風說話、吹氣或拍手</li>
+          <li>聲音會觸發漣漪和隨機音符</li>
+          <li>右下角按鈕可切換視覺風格</li>
+        </ul>
+      </div>
+
+      <button id="start-btn" class="start-button px-8 py-4 bg-slate-100 text-slate-900 rounded-full text-lg font-medium transition-all hover:bg-white hover:scale-105 active:scale-95">
+        點擊開始
+      </button>
+
+      <!-- 隱私聲明 -->
+      <p class="text-slate-500 text-xs mt-5 leading-relaxed">
+        🔒 你的聲音僅在本地處理，不會被錄音或上傳
+      </p>
+      <p class="text-slate-600 text-xs mt-2">
+        建議使用耳機以獲得最佳體驗
+      </p>
+    </div>
+  </div>
+
+  <!-- p5.js Canvas 會自動插入這裡 -->
+
+  <!-- 風格切換按鈕 -->
+  <div id="style-control" class="fixed bottom-8 right-8 z-40 opacity-0 transition-opacity duration-300">
+    <button id="style-btn" class="flex items-center gap-2 px-4 py-2 bg-slate-800/80 backdrop-blur-sm rounded-full shadow-lg border border-slate-600/50 hover:bg-slate-700/80 transition-all hover:scale-105 active:scale-95">
+      <span class="text-slate-400 text-sm">風格</span>
+      <span id="style-label" class="text-slate-100 font-medium">直線</span>
+      <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+      </svg>
+    </button>
+  </div>
+
+  <script src="sketch.js"></script>
+</body>
+</html>
