@@ -272,6 +272,14 @@ Lydian 調式的特色是升四度 (F#)，聽起來飄浮、夢幻，非常適�
 
 ---
 
+## 致謝
+
+特別感謝 **Lovena Huang** 老師在音樂上的寶貴建議。
+
+這個作品如果聽起來有那麼一點音樂的品味，那都是 Lovena Huang 的功勞；如果聽起來怪怪的，那就是我沒學好。
+
+---
+
 ## License
 
 [![CC BY 4.0](https://img.shields.io/badge/License-CC%20BY%204.0-lightgrey.svg)](https://creativecommons.org/licenses/by/4.0/)
