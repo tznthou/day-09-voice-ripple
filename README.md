@@ -27,6 +27,11 @@ graph TB
         SYNTH[PolySynth<br/>合成器]
     end
 
+    subgraph Melody["旋律生成"]
+        MARKOV[Markov Chain<br/>選音]
+        DYNAMICS[動態力度<br/>velocity]
+    end
+
     subgraph Visual["視覺渲染 (p5.js)"]
         WAVE[中央波形<br/>5 種風格]
         RIPPLE[漣漪系統]
@@ -41,7 +46,9 @@ graph TB
     MIC --> UM
     UM --> METER
     UM --> WF
-    METER -->|超過閾值| SYNTH
+    METER -->|超過閾值| MARKOV
+    MARKOV --> DYNAMICS
+    DYNAMICS --> SYNTH
     METER -->|超過閾值| RIPPLE
     WF --> WAVE
     SYNTH --> SPEAKER
@@ -59,6 +66,7 @@ sequenceDiagram
     participant M as 麥克風
     participant Meter as Meter
     participant Check as 閾值檢測
+    participant Markov as Markov Chain
     participant Synth as 合成器
     participant Visual as 視覺系統
 
@@ -66,7 +74,9 @@ sequenceDiagram
         M->>Meter: 音量數據
         Meter->>Check: currentVolume
         alt 音量 > 閾值 且 非冷卻中
-            Check->>Synth: triggerNote()
+            Check->>Markov: getNextNote(volume)
+            Markov-->>Synth: {note, velocity}
+            Synth->>Synth: triggerAttackRelease()
             Check->>Visual: createRipple()
             Check->>Check: startFeedbackProtection()
         end
@@ -99,7 +109,9 @@ python -m http.server 8000
 | **即時波形** | 中央的圓形視覺化顯示聲音的波形 |
 | **5 種風格** | 直線 / 螺旋 / 波浪 / 有機 / 花瓣 |
 | **彩色漣漪** | 每次觸發產生隨機顏色的漣漪擴散 |
-| **五聲音階** | 自動播放和諧的 C Major Pentatonic 音符 |
+| **Lydian 調式** | C Lydian 音階 (C D E F# G A B)，飄浮夢幻感 |
+| **Markov Chain** | 旋律生成非隨機，有連貫的音樂性 |
+| **動態力度** | 說話大聲音符力度強，小聲力度輕 |
 | **回授防護** | 智慧避免電腦發出的聲音觸發自己 |
 | **隱私安全** | 聲音僅在本地處理，不錄音、不上傳 |
 
@@ -143,9 +155,14 @@ graph LR
 
 ```
 day-09-voice-ripple/
-├── index.html    # HTML 結構 + CDN 載入（含 SRI）
-├── sketch.js     # 主邏輯（~440 行）
-├── style.css     # 補充樣式
+├── index.html        # HTML 結構 + CDN 載入（含 SRI）
+├── style.css         # 補充樣式
+├── js/
+│   ├── main.js       # p5.js 入口
+│   ├── config.js     # 設定參數
+│   ├── audio.js      # 音頻系統 + 回授防護
+│   ├── melody.js     # Markov Chain 旋律生成
+│   └── visual.js     # 視覺系統（5種風格）
 ├── README.md
 └── LICENSE
 ```
@@ -200,14 +217,37 @@ flowchart TD
 | `RIPPLE_FADE_SPEED` | 2 | 漣漪淡出速度 |
 | `MAX_RIPPLES` | 30 | 最大同時存在漣漪數 |
 
-### 五聲音階
+### Lydian 調式音階
 
 ```
-C Major Pentatonic（跨三個八度）
-C3, D3, E3, G3, A3
-C4, D4, E4, G4, A4
-C5, D5, E5, G5, A5
+C Lydian（跨三個八度）
+C3, D3, E3, F#3, G3, A3, B3
+C4, D4, E4, F#4, G4, A4, B4
+C5, D5, E5, F#5, G5, A5, B5
 ```
+
+Lydian 調式的特色是升四度 (F#)，聽起來飄浮、夢幻，非常適合這個互動體驗。
+
+### Markov Chain 旋律生成
+
+不再是隨機選音，而是根據前一個音符決定下一個：
+
+| 移動量 | 音樂意義 | 機率 |
+|--------|----------|------|
+| -3 | 跳進下行 | 5% |
+| -2 | 級進下行 | 10% |
+| -1 | 小二度下行 | 20% |
+| 0 | 同音重複 | 10% |
+| +1 | 小二度上行 | 25% |
+| +2 | 級進上行 | 15% |
+| +3 | 跳進上行 | 5% |
+| 回主音 | 回到 C | 10% |
+
+**設計理由**：
+- 級進占 45%，旋律平滑
+- 上行 45% vs 下行 35%，略有朝氣（符合 Lydian 飄浮感）
+- 回主音 10%，確保調性穩定
+- 第一個音固定從 C4 開始，給聽眾調性錨點
 
 ---
 
