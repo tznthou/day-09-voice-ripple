@@ -8,10 +8,10 @@
 // ============================================
 const CONFIG = {
   // 音頻參數
-  BASE_THRESHOLD: 0.02,      // 基礎音量閾值 (0-1) - 降低讓行動端更靈敏
-  COOLDOWN_MS: 180,          // 觸發後冷卻時間
-  SILENCE_MS: 80,            // 觸發後靜音期
-  DYNAMIC_BOOST: 0.04,       // 動態閾值提升量
+  BASE_THRESHOLD: 0.025,     // 基礎音量閾值 (0-1) - 平衡靈敏度與抗噪
+  COOLDOWN_MS: 220,          // 觸發後冷卻時間（加長防回授）
+  SILENCE_MS: 100,           // 觸發後靜音期（加長防回授）
+  DYNAMIC_BOOST: 0.06,       // 動態閾值提升量（加大防回授）
 
   // 視覺參數
   BG_COLOR: '#1a1d2e',       // 背景色（深藍黑）
@@ -133,7 +133,7 @@ async function initAudio() {
     // 初始化麥克風
     mic = new Tone.UserMedia();
     await mic.open();
-    mic.volume.value = 6;  // 提升麥克風增益 6dB，改善行動端靈敏度
+    mic.volume.value = 3;  // 提升麥克風增益 3dB，平衡行動端靈敏度與回授防護
 
     // 初始化分析器 - smoothing 降低讓反應更即時
     meter = new Tone.Meter({ normalRange: true, smoothing: 0.3 });
