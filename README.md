@@ -269,4 +269,13 @@ Lydian 調式的特色是升四度 (F#)，聽起來飄浮、夢幻，非常適�
 
 ## License
 
-[MIT](LICENSE)
+[![CC BY 4.0](https://img.shields.io/badge/License-CC%20BY%204.0-lightgrey.svg)](https://creativecommons.org/licenses/by/4.0/)
+
+This work is licensed under a [Creative Commons Attribution 4.0 International License](https://creativecommons.org/licenses/by/4.0/).
+
+**你可以自由地：**
+- 分享 — 以任何媒介或格式複製、散布本作品
+- 改作 — 重混、轉換、或依本作品建立新作品，且可為任何目的，包含商業用途
+
+**唯須遵守以下條件：**
+- 署名 — 你必須給予適當的署名、提供授權條款的連結，並指出是否有進行修改
