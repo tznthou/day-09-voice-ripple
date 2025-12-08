@@ -51,17 +51,44 @@ export function getIsRunning() {
 // ============================================
 
 /**
+ * 列舉可用的音訊輸入裝置
+ * @returns {Promise<MediaDeviceInfo[]>} 麥克風裝置陣列
+ */
+export async function enumerateMicrophones() {
+  if (!navigator.mediaDevices?.enumerateDevices) {
+    console.warn('enumerateDevices API 不支援');
+    return [];
+  }
+
+  try {
+    const devices = await navigator.mediaDevices.enumerateDevices();
+    return devices.filter(device => device.kind === 'audioinput');
+  } catch (err) {
+    console.error('列舉裝置失敗:', err);
+    return [];
+  }
+}
+
+/**
  * 初始化音頻系統
+ * @param {string} [deviceId] - 麥克風裝置 ID（可選，空值使用預設）
  * @returns {Promise<boolean>} 是否成功
  */
-export async function initAudio() {
+export async function initAudio(deviceId = '') {
   try {
     // 啟動 Tone.js AudioContext
     await Tone.start();
 
     // 初始化麥克風
     mic = new Tone.UserMedia();
-    await mic.open();
+
+    // 使用指定裝置或預設裝置
+    if (deviceId) {
+      await mic.open(deviceId);
+    } else {
+      await mic.open();
+    }
+
     mic.volume.value = 3;  // 提升麥克風增益 3dB
 
     // 初始化分析器

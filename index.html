@@ -40,6 +40,19 @@
         </ul>
       </div>
 
+      <!-- 麥克風選擇（多裝置時才顯示） -->
+      <div id="mic-selector" class="hidden mb-6">
+        <label for="mic-select" class="block text-slate-300 text-sm mb-2 font-medium">選擇麥克風</label>
+        <div class="relative">
+          <select id="mic-select" class="w-full bg-slate-700/50 border border-slate-600 rounded-lg px-4 py-2.5 text-slate-100 text-sm focus:outline-none focus:ring-2 focus:ring-slate-500 appearance-none cursor-pointer pr-10">
+            <option value="">預設麥克風</option>
+          </select>
+          <svg class="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+          </svg>
+        </div>
+      </div>
+
       <button id="start-btn" class="start-button px-8 py-4 bg-slate-100 text-slate-900 rounded-full text-lg font-medium transition-all hover:bg-white hover:scale-105 active:scale-95">
         點擊開始
       </button>
