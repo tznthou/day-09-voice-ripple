@@ -1,4 +1,4 @@
-# Voice Ripple Piano
+# Voice Ripple 音你而起的漣漪
 
 [![License: CC BY 4.0](https://img.shields.io/badge/License-CC%20BY%204.0-lightgrey.svg)](https://creativecommons.org/licenses/by/4.0/)
 [![Live Demo](https://img.shields.io/badge/Demo-Live-blue.svg)](https://tznthou.github.io/day-09-voice-ripple/)
@@ -7,7 +7,7 @@
 
 > 聲控漣漪鋼琴 — 音你而起的漣漪
 
-[← 回到 Muripo HQ](https://tznthou.github.io/muripo-hq/)
+[← 回到 Muripo HQ](https://tznthou.github.io/muripo-hq/) | [English](README_EN.md)
 
 ---
 
@@ -298,3 +298,9 @@ This work is licensed under a [Creative Commons Attribution 4.0 International Li
 
 **唯須遵守以下條件：**
 - 署名 — 你必須給予適當的署名、提供授權條款的連結，並指出是否有進行修改
+
+---
+
+## 作者
+
+子超 - [tznthou@gmail.com](mailto:tznthou@gmail.com)
